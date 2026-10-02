@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 Environment = Literal["local", "ci", "prod"]
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR"]
 
+
 class BaseServiceSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
