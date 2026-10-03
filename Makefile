@@ -42,3 +42,17 @@ check: lint test ## Everything CI will run
 clean: ## Remove caches
 	rm -rf .pytest_cache .ruff_cache
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +
+
+# ---------- classifier service (Phase 1) ----------
+
+classifier-dev: ## Run the classifier on port 8001 with auto-reload (real OpenAI)
+	uv run uvicorn classifier_service.main:create_app --factory --reload --port 8001
+
+classifier-fake: ## Same, with the offline fake LLM (no API key, no cost)
+	LLM_PROVIDER=fake uv run uvicorn classifier_service.main:create_app --factory --reload --port 8001
+
+classify: ## Send one email: make classify EMAIL="I was charged twice"
+	uv run python scripts/try_classifier.py "$(EMAIL)"
+
+build: ## Build all service images
+	$(COMPOSE) build
