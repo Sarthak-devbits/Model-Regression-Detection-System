@@ -3,11 +3,13 @@ name = "llm-regression-ci"
 version = "0.1.0"
 description = "CI/CD for LLM behavior: detect prompt and model regressions"
 requires-python = ">=3.13"
-dependencies = ["shared"]
+dependencies = ["shared", "classifier-service"]
 
 [dependency-groups]
 dev = [
   "pytest>=8.2",
+  "pytest-asyncio>=0.23",
+  "httpx>=0.27",
   "ruff>=0.6",
   "pre-commit>=3.7",
 ]
@@ -16,10 +18,11 @@ dev = [
 package = false
 
 [tool.uv.workspace]
-members = ["libs/shared"]
+members = ["libs/shared", "services/classifier"]
 
 [tool.uv.sources]
 shared = { workspace = true }
+classifier-service = { workspace = true }
 
 [tool.ruff]
 line-length = 100
@@ -29,8 +32,9 @@ target-version = "py311"
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["shared"]
+known-first-party = ["shared", "classifier_service"]
 
 [tool.pytest.ini_options]
-testpaths = ["libs"]
+testpaths = ["libs", "services"]
 addopts = "-ra -q --import-mode=importlib"
+asyncio_mode = "auto"
