@@ -15,5 +15,18 @@ services:
       retries: 10
     restart: unless-stopped
 
+  classifier:
+    build:
+      context: ..
+      dockerfile: services/classifier/Dockerfile
+    image: regci/classifier:dev
+    env_file:
+      - ../.env
+    environment:
+      SERVICE_NAME: classifier
+    ports:
+      - "127.0.0.1:8001:8001"
+    restart: unless-stopped
+
 volumes:
   redis_data:
