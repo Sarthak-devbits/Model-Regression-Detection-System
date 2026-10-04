@@ -1,0 +1,177 @@
+{
+  "$defs": {
+    "CaseInput": {
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "maxLength": 8000,
+          "minLength": 1,
+          "title": "Email",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ],
+      "title": "CaseInput",
+      "type": "object"
+    },
+    "CaseSource": {
+      "enum": [
+        "hand_written",
+        "eval_failure",
+        "production"
+      ],
+      "title": "CaseSource",
+      "type": "string"
+    },
+    "Category": {
+      "enum": [
+        "billing",
+        "technical",
+        "account",
+        "general"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "Difficulty": {
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "EdgeCase": {
+      "enum": [
+        "ambiguous",
+        "very_short",
+        "typos",
+        "mixed_language",
+        "sarcasm",
+        "multi_issue",
+        "long"
+      ],
+      "title": "EdgeCase",
+      "type": "string"
+    },
+    "ExpectedOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "$ref": "#/$defs/Category"
+        },
+        "summary": {
+          "maxLength": 300,
+          "minLength": 10,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "summary"
+      ],
+      "title": "ExpectedOutput",
+      "type": "object"
+    },
+    "GoldenCase": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^gc-\\d{4}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/$defs/CaseInput"
+        },
+        "expected": {
+          "$ref": "#/$defs/ExpectedOutput"
+        },
+        "expected_difficulty": {
+          "$ref": "#/$defs/Difficulty"
+        },
+        "edge_cases": {
+          "items": {
+            "$ref": "#/$defs/EdgeCase"
+          },
+          "title": "Edge Cases",
+          "type": "array"
+        },
+        "notes": {
+          "minLength": 1,
+          "title": "Notes",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/CaseSource",
+          "default": "hand_written"
+        },
+        "added_in": {
+          "pattern": "^v\\d+$",
+          "title": "Added In",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "input",
+        "expected",
+        "expected_difficulty",
+        "notes",
+        "added_in"
+      ],
+      "title": "GoldenCase",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "$Schema"
+    },
+    "dataset_version": {
+      "pattern": "^v\\d+$",
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "labeling_guide_version": {
+      "minimum": 1,
+      "title": "Labeling Guide Version",
+      "type": "integer"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/GoldenCase"
+      },
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    }
+  },
+  "required": [
+    "dataset_version",
+    "description",
+    "labeling_guide_version",
+    "cases"
+  ],
+  "title": "GoldenDataset",
+  "type": "object"
+}

@@ -2,7 +2,9 @@
 COMPOSE := docker compose -f infra/docker-compose.yml --env-file .env
 
 .DEFAULT_GOAL := help
-.PHONY: help install up down logs ps redis-ping test lint fmt check clean
+.PHONY: help install up down logs ps redis-ping test lint fmt check clean golden-validate golden-strict golden-stats golden-schema golden-new golden-freeze
+
+V ?= v1
 
 help: ## Show this list
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "} {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -37,7 +39,7 @@ fmt: ## Auto-fix lint issues and format
 	uv run ruff check --fix .
 	uv run ruff format .
 
-check: lint test ## Everything CI will run
+check: lint test golden-validate ## Everything CI will run
 
 clean: ## Remove caches
 	rm -rf .pytest_cache .ruff_cache
@@ -56,3 +58,23 @@ classify: ## Send one email: make classify EMAIL="I was charged twice"
 
 build: ## Build all service images
 	$(COMPOSE) build
+
+# ---------- golden dataset (Phase 2) ----------
+
+golden-validate: ## Validate every golden dataset version
+	uv run python scripts/golden.py validate
+
+golden-strict: ## Validate one version, warnings fail too (V=v1)
+	uv run python scripts/golden.py validate $(V) --strict
+
+golden-stats: ## Coverage table for one version (V=v1)
+	uv run python scripts/golden.py stats $(V)
+
+golden-schema: ## Regenerate golden/schema.json from the Pydantic models
+	uv run python scripts/golden.py schema
+
+golden-new: ## Start a new draft version (FROM=v1 TO=v2)
+	uv run python scripts/golden.py new $(FROM) $(TO)
+
+golden-freeze: ## Lock a version as an official eval bar (V=v1)
+	uv run python scripts/golden.py freeze $(V)

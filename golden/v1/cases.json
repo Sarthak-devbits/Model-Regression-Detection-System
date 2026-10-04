@@ -1,0 +1,1291 @@
+{
+  "$schema": "../schema.json",
+  "dataset_version": "v1",
+  "description": "Hand-labelled customer support emails for the classifier.",
+  "labeling_guide_version": 1,
+  "cases": [
+    {
+      "id": "gc-0001",
+      "input": {
+        "email": "Hi, I was charged twice for my March subscription (invoices #4471 and #4472). Can you refund the duplicate charge? Thanks, Priya"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer was charged twice for the March subscription and wants the duplicate refunded."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Baseline billing case: clear money problem, clear ask.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0002",
+      "input": {
+        "email": "The export to CSV button does nothing since yesterday's update. I click it and no file downloads. Chrome on Windows 11."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "CSV export stopped working after the latest update and no file downloads."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Baseline technical case: a feature is broken.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0003",
+      "input": {
+        "email": "How do I change the email address on my account? I'm leaving my job and will lose access to my work inbox."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants to change their account email because they will lose access to the current one."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Baseline account case: profile and login identity.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0004",
+      "input": {
+        "email": "Do you have a public roadmap? We'd love to know if dark mode is planned."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks whether there is a public roadmap and if dark mode is planned."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Baseline general case: product question, nothing broken, no money involved.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0005",
+      "input": {
+        "email": "hi i upgradedd to the pro plan last weak but my invoce still says basic and i got charge the pro price?? pls fix"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer upgraded to Pro and paid the Pro price, but the invoice still shows the Basic plan."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "typos"
+      ],
+      "notes": "Typos on key words (invoice, charged) the model must read through.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0006",
+      "input": {
+        "email": "locked out again"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer reports being locked out of their account again."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Three words, no context. Guide rule 3: access problems are account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0007",
+      "input": {
+        "email": "Love how your app logs me out every 5 minutes. Really great for productivity. Truly a masterpiece of engineering."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer is sarcastically reporting that the app logs them out every five minutes."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "sarcasm"
+      ],
+      "notes": "Positive words, negative meaning. Also tests guide rule 3: a session bug is technical, not account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0008",
+      "input": {
+        "email": "Your outage on Tuesday took our dashboard down for 6 hours. We're on the Enterprise SLA, so we expect a service credit on this month's bill."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Enterprise customer requests an SLA service credit for a six-hour outage on Tuesday."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous",
+        "multi_issue"
+      ],
+      "notes": "Full of technical words but the ask is money. Guide rule 1: label by what they want done.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0009",
+      "input": {
+        "email": "Hola, we're a small agency in Madrid. ¿Ofrecen descuentos para ONGs? Some of our clients are nonprofits."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Madrid agency asks whether discounts are available for nonprofit organisations."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "mixed_language",
+        "ambiguous"
+      ],
+      "notes": "Key question is in Spanish. Pre-purchase pricing is general per guide rule 4, not billing. Summary in English per rule 6.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0010",
+      "input": {
+        "email": "Webhook deliveries to our endpoint have failed with 401 since we rotated our API key this morning. Did the signing secret change too?"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Webhook deliveries fail with 401 errors since the customer rotated their API key."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Mentions keys and auth, but it's an integration failure, not account access.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0011",
+      "input": {
+        "email": "Please delete my account and stop charging my card."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants their account deleted and the card charges stopped."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous",
+        "multi_issue"
+      ],
+      "notes": "Two asks. Guide rule 2: closing the account resolves both, so account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0012",
+      "input": {
+        "email": "Just wanted to say the new onboarding flow is fantastic, my team got set up in ten minutes!"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer praises the new onboarding flow for getting their team set up quickly."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Genuine praise, a contrast case for the sarcasm example gc-0007. Praise is general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0013",
+      "input": {
+        "email": "receipt pls"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer asks for a receipt for their payment."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Two words. Tests that the summary doesn't invent details that aren't there.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0014",
+      "input": {
+        "email": "Our security team needs your SOC 2 report before we sign the contract. Who should we contact to get a copy?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer requests the SOC 2 report before signing a contract."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Sounds technical (security) but nothing is broken; it's a pre-sales document request.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0015",
+      "input": {
+        "email": "Hello, I'd like to switch from monthly to annual billing on my Team plan. How do I do that?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer wants to switch their Team plan from monthly to annual billing."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Plan and billing-cycle change: money on an existing account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0016",
+      "input": {
+        "email": "Can you send me a copy of last month's invoice? My accountant needs it for the books."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer asks for a copy of last month's invoice for their accountant."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Invoice request, clear billing ask.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0017",
+      "input": {
+        "email": "My credit card expired. Where do I update the payment method before the next charge?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer wants to update an expired credit card before the next charge."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Payment method update is billing per the guide, even though it lives in settings.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0018",
+      "input": {
+        "email": "I was billed $49 but my plan is supposed to be $29 a month. Please correct this."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer was billed $49 instead of $29 monthly and wants the charge corrected."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Straightforward overcharge.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0019",
+      "input": {
+        "email": "I want to downgrade from Business to Starter at the end of this billing cycle."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer wants to downgrade from Business to Starter at the end of the billing cycle."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Plan downgrade: explicitly billing per the guide.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0020",
+      "input": {
+        "email": "Please refund my last payment. I cancelled within the 14-day trial window and still got charged."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer cancelled within the 14-day trial but was still charged and wants a refund."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Mentions cancelling, but the ask is the refund (rule 1).",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0021",
+      "input": {
+        "email": "Can you print our company VAT number on my invoices? It's needed for our tax filing."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer wants their company VAT number printed on their invoices."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Invoice content change, billing.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0022",
+      "input": {
+        "email": "ive been charged 2 times this month for the same seat, can u refnd one of them"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer says they were charged twice this month for the same seat and wants one charge refunded."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "typos"
+      ],
+      "notes": "Lowercase and misspelled (refnd) but the intent is clear; tests robustness to typos.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0023",
+      "input": {
+        "email": "Refund status?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer asks for the status of a refund."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Two words. Summary must not invent an amount or date (rule 8).",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0024",
+      "input": {
+        "email": "We use 40 seats but our invoice only shows 35. Did you undercount or did we get a discount we don't know about?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer notices their invoice shows 35 seats instead of the 40 they use and asks why."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Seat count on an invoice is billing even though it reads like a product question.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0025",
+      "input": {
+        "email": "Why did my bill go up this month? Nothing changed on my side."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer asks why their bill increased this month when nothing changed on their side."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Question about charges on an existing account (rule 4).",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0026",
+      "input": {
+        "email": "Bonjour, j'ai été débité deux fois ce mois-ci. Can you please refund the extra payment?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer was debited twice this month and asks for the extra payment to be refunded."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "mixed_language"
+      ],
+      "notes": "French opening, English ask. Summary in English per rule 6.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0027",
+      "input": {
+        "email": "Oh great, another surprise charge on my card. Your billing team really keeps me on my toes. Thanks so much for the 'free trial'."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer sarcastically complains about an unexpected charge after what they thought was a free trial."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "sarcasm"
+      ],
+      "notes": "Thankful words, angry meaning. Contrast with real praise gc-0012.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0028",
+      "input": {
+        "email": "The dashboard has been super slow for weeks and honestly I'm done paying full price for it. I want a partial refund for this month or I'll cancel."
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer wants a partial refund for this month because the dashboard has been slow for weeks."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous",
+        "multi_issue"
+      ],
+      "notes": "Technical complaint, but the thing to do is money back. Rule 1; cancel threat is secondary.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0029",
+      "input": {
+        "email": "Hi there,\n\nI hope you're having a great week! First of all, I want to say how much our team has enjoyed using the platform over the past two years. We started with just three people in the marketing department and now almost the whole company uses it every day, so thank you for building something that has genuinely made our work easier. Our onboarding coordinator, Maria, especially loves the templates and the weekly summary emails, and she asked me to pass on her compliments to whoever designs them.\n\nI'm writing because we recently went through a reorganization, and our finance department has asked me to tidy up a few things before the end of the quarter. We changed our legal entity name in January, which is why the company name on our older paperwork looks different from what's on our newer paperwork. I know this kind of thing is a hassle and I really appreciate your patience.\n\nSo, to get to the point, could you please reissue invoice #5530 with our new legal entity name, Brightwave Holdings Ltd, and send it to billing@brightwave.example? Thanks so much in advance!\n\nBest,\nDana"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer asks for invoice #5530 to be reissued under their new legal entity name and sent to a billing address."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "long"
+      ],
+      "notes": "Politeness and backstory hide a one-line billing ask in the last paragraph.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0030",
+      "input": {
+        "email": "I tried to upgrade my plan but the page crashed and now I'm not sure whether I was charged. Can you check?"
+      },
+      "expected": {
+        "category": "billing",
+        "summary": "Customer's upgrade page crashed and they ask whether they were charged for the upgrade."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous"
+      ],
+      "notes": "A crash story, but what they want checked is a charge. Rule 1.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0031",
+      "input": {
+        "email": "The mobile app crashes every time I open the reports tab. iPhone 14, iOS 17."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Mobile app crashes whenever the customer opens the reports tab on an iPhone."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Clear crash report.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0032",
+      "input": {
+        "email": "Getting a 500 error when I try to save my dashboard settings."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer gets a 500 error when saving dashboard settings."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Clear error report.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0033",
+      "input": {
+        "email": "The page takes forever to load today, like 30 seconds for the main dashboard."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Main dashboard takes about 30 seconds to load today."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Slowness is technical per the guide.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0034",
+      "input": {
+        "email": "Your API returns 429 Too Many Requests even though we've made fewer than 100 calls today."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "API returns rate limit errors for the customer despite fewer than 100 calls today."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "API problem, technical.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0035",
+      "input": {
+        "email": "Uploaded files over 10MB fail with 'upload error' every time."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer's file uploads over 10MB fail with an upload error every time."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Specific reproducible bug.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0036",
+      "input": {
+        "email": "The Slack integration stopped posting notifications to our channel after Monday."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Slack integration stopped posting notifications to the customer's channel after Monday."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Integration failure.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0037",
+      "input": {
+        "email": "Search is returning no results for anything I type, even for things I know exist."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Search returns no results even for items the customer knows exist."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Clear functional bug.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0038",
+      "input": {
+        "email": "the aplication keeps freezng when i try to uplod a photo, tried 3 times"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Application freezes whenever the customer tries to upload a photo, after three attempts."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "typos"
+      ],
+      "notes": "Typos on the key nouns and verbs.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0039",
+      "input": {
+        "email": "Site is down?"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer asks whether the site is down."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Three words. A question, but about an outage, so technical.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0040",
+      "input": {
+        "email": "API 503 again"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer reports the API is returning 503 errors again."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Three words of jargon; the model must read the status code as an outage.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0041",
+      "input": {
+        "email": "Exported PDF reports have missing charts since the last release. The data table is fine."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Exported PDF reports are missing charts since the last release while the data table is fine."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Regression report with a clear before and after.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0042",
+      "input": {
+        "email": "When I'm logged in on two browsers at once, changes in one don't show up in the other until I refresh."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Changes made in one browser do not appear in a second logged-in browser until a refresh."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Mentions 'logged in' but nothing about access, so not account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0043",
+      "input": {
+        "email": "Hallo, die Synchronisierung mit Google Calendar funktioniert nicht mehr. Events are not showing up since Thursday."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Google Calendar sync stopped working and events have not appeared since Thursday."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "mixed_language"
+      ],
+      "notes": "German sentence plus English; both describe the same integration failure.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0044",
+      "input": {
+        "email": "I keep getting kicked out and told 'session expired' right after logging in. My password is definitely right."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer is told their session expired immediately after logging in even though their password is correct."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous"
+      ],
+      "notes": "Rule 3: credentials are fine, the product misbehaves, so technical rather than account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0045",
+      "input": {
+        "email": "Fantastic job on the latest update. Now the 'Save' button saves nothing, which is a bold design choice."
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer sarcastically reports that the Save button no longer saves anything after the latest update."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "sarcasm"
+      ],
+      "notes": "Praise words on top of a bug report.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0046",
+      "input": {
+        "email": "CSV import fails on rows with commas in names. Also, could you add an option to skip bad rows?"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "CSV import fails on rows with commas in names and the customer would like an option to skip bad rows."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "multi_issue"
+      ],
+      "notes": "Bug plus feature request. Rule 2: fixing the bug is the ask that matters most.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0047",
+      "input": {
+        "email": "Hello support,\n\nMy name is Rahul and I manage the engineering side of our account. I'm sending this because I've been going back and forth with my own finance team and our account manager for a week and nobody seems to be able to help, so I'm hoping you can route this to the right place.\n\nSome background: we renewed our annual plan in March, paid the invoice on time, and added two new users in April. About three weeks ago our billing contact, Meera, left the company and I became the admin on the account. Everything about that handover went fine and I can log in and manage users without any trouble.\n\nThe actual problem is that since last Tuesday our webhook endpoint at https://hooks.northwind.example/events has stopped receiving any events at all. We used to get about 200 deliveries a day for order.created and order.updated. Now nothing arrives, and the delivery log in the dashboard shows every attempt as 'timed out after 10s' even though our endpoint is up and responds in under a second when I curl it myself. We haven't changed the endpoint, the signing secret or our firewall rules.\n\nCould you please investigate why deliveries are timing out and re-send the events we missed since Tuesday? Thanks, Rahul"
+      },
+      "expected": {
+        "category": "technical",
+        "summary": "Customer's webhook deliveries have timed out since last Tuesday even though their endpoint responds, and they want the cause investigated and missed events re-sent."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "long"
+      ],
+      "notes": "Lots of billing and account backstory around a webhook outage; the real ask is technical.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0048",
+      "input": {
+        "email": "I forgot my password. How do I reset it?"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer forgot their password and asks how to reset it."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Baseline credentials case, rule 3.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0049",
+      "input": {
+        "email": "Please add my colleague sara@example.com as a team member on our workspace."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants colleague sara@example.com added as a team member on their workspace."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Team membership is account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0050",
+      "input": {
+        "email": "I need to change the name on my profile, it still shows my maiden name."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants to change the name shown on their profile."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Profile change.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0051",
+      "input": {
+        "email": "Please close my account. I'm no longer using the service."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer asks for their account to be closed because they no longer use the service."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Closing an account is account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0052",
+      "input": {
+        "email": "My account got locked after too many failed login attempts. Please unlock it."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer's account was locked after too many failed login attempts and they want it unlocked."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Lockout from credentials, rule 3.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0053",
+      "input": {
+        "email": "I want to transfer ownership of our workspace to my manager, Tom."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants to transfer ownership of their workspace to their manager Tom."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Ownership change is account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0054",
+      "input": {
+        "email": "Can you remove a former employee, john@acme.com, from our team? He still has access."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants former employee john@acme.com removed from their team because he still has access."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Team member removal.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0055",
+      "input": {
+        "email": "cant login, forgot passwrd and the reset link dosnt work either"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer cannot log in, forgot their password, and says the reset link does not work."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "typos"
+      ],
+      "notes": "Typos plus a broken-looking reset link; rule 3 still says credentials, so account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0056",
+      "input": {
+        "email": "delete my account"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer asks for their account to be deleted."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Three words, no punctuation.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0057",
+      "input": {
+        "email": "Change my email"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants to change the email address on their account."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Three words. Summary says 'on their account' only because email change is an account action.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0058",
+      "input": {
+        "email": "My company changed domains from oldco.com to newco.com. Can we move all our users' logins over?"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer wants all their users' logins moved from the oldco.com domain to newco.com."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Domain mentions and bulk logins; identity change, so account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0059",
+      "input": {
+        "email": "I'm the admin and one of my team members can't see the shared project. Can you check her permissions?"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Admin asks for a team member's permissions to be checked because she cannot see the shared project."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Looks like a bug but permissions are team management, account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0060",
+      "input": {
+        "email": "Hola, no puedo acceder a mi cuenta porque olvidé mi contraseña. Please help me recover it."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer cannot access their account after forgetting their password and wants help recovering it."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "mixed_language"
+      ],
+      "notes": "Spanish first half, English second half.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0061",
+      "input": {
+        "email": "Wonderful, locked out of my own account for the third time this week. Your 'security' is truly protecting me from myself."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer sarcastically complains about being locked out of their own account for the third time this week."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "sarcasm"
+      ],
+      "notes": "Sarcasm on a lockout. Rule 3: lockout is account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0062",
+      "input": {
+        "email": "i think some1 got into my acount, need to chnge my pasword and email asap"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer thinks someone accessed their account and wants to change their password and email immediately."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous",
+        "multi_issue",
+        "typos"
+      ],
+      "notes": "Possible hack, two changes, typos. Rule 2: changing credentials resolves it, so account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0063",
+      "input": {
+        "email": "Hello,\n\nI'm writing on behalf of Lakeside Dental, a small practice with about twelve staff. We've been customers for roughly eight months and mostly everything has been smooth, so thanks for that. I wanted to give you some context before I ask my question because the last time I contacted support I felt I had to explain everything from scratch.\n\nWe use the scheduling and reminders features every day. Our front desk, Priya and Marcus, send around 80 reminders a day. The reports that you send us every Monday are useful for our office manager, who shares them with the dentists. Our only complaint, which I'll mention just for the record, is that the Monday report arrives a bit late some weeks, but it isn't urgent and we've lived with it.\n\nNow the reason for my email. Two of our staff have left (Jenna and Paul), and we've hired three new people who start on Monday: Alicia, Tomas and Wei. Could you remove Jenna and Paul from our team so they can no longer log in, and invite the three new people to join with the standard staff role? I can send their work emails if you need them. Thank you for your help!\n\nKind regards,\nSam"
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer asks to remove two departed staff members from the team and invite three new hires with the standard staff role."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "long"
+      ],
+      "notes": "Long backstory with complaints about reports; the real ask is team membership.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0064",
+      "input": {
+        "email": "Can't get into the dashboard since yesterday. Same login as always."
+      },
+      "expected": {
+        "category": "account",
+        "summary": "Customer has been unable to get into the dashboard since yesterday using their usual login."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous"
+      ],
+      "notes": "Rule 5: could be a lockout or a bug. Most likely reading is access, so account.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0065",
+      "input": {
+        "email": "Do you offer a mobile app for Android?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks whether an Android mobile app is available."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Product question.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0066",
+      "input": {
+        "email": "What are your support hours? I need to know when someone is available."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks about the support team's hours."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Informational question.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0067",
+      "input": {
+        "email": "Can you add a Kanban view? It would really help our team."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer requests a Kanban view for their team."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Feature request is general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0068",
+      "input": {
+        "email": "Does the product integrate with Notion?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks whether the product integrates with Notion."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Pre-sales style question about integrations; nothing is broken.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0069",
+      "input": {
+        "email": "Great service, your support team solved my problem in minutes. Thank you!"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer thanks the support team for solving their problem in minutes."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Genuine praise, a contrast to sarcasm gc-0007.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0070",
+      "input": {
+        "email": "Where can I find your privacy policy and data processing agreement?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks where to find the privacy policy and data processing agreement."
+      },
+      "expected_difficulty": "easy",
+      "edge_cases": [],
+      "notes": "Legal documents are general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0071",
+      "input": {
+        "email": "do u have a studnt discount before i sign up? thx"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer asks whether a student discount is available before signing up."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "typos"
+      ],
+      "notes": "Rule 4: discount before purchase is general, not billing.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0072",
+      "input": {
+        "email": "Pricing?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks about the product's pricing."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "One word. Not billing because they are not yet a customer (rule 4).",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0073",
+      "input": {
+        "email": "Do you have an API?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks whether the product has an API."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "very_short"
+      ],
+      "notes": "Five words. Question about capability, not a broken API.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0074",
+      "input": {
+        "email": "We're evaluating you against two competitors. Can someone walk us through how you compare on reporting?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer asks for a comparison of reporting features against competitors."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Pre-sales comparison.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0075",
+      "input": {
+        "email": "Bonjour! Est-ce que vous avez une version en français? We'd like to roll it out to our Paris office."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer asks whether a French version of the product exists for their Paris office."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [
+        "mixed_language"
+      ],
+      "notes": "French question with English context.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0076",
+      "input": {
+        "email": "I'm thinking about signing up for the annual plan. Is there a discount compared to monthly?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer asks whether the annual plan is cheaper than monthly billing."
+      },
+      "expected_difficulty": "medium",
+      "edge_cases": [],
+      "notes": "Rule 4: not yet a customer, so general even though it is about price.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0077",
+      "input": {
+        "email": "Does the Pro plan come with SSO? We're on Basic right now and thinking about moving up."
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Basic plan customer asks whether the Pro plan includes SSO before deciding to upgrade."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous"
+      ],
+      "notes": "Existing customer, but the ask is a feature question, not a plan change, so general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0078",
+      "input": {
+        "email": "Wow, so glad you finally added a feature nobody asked for. Any chance you'd fix the ones we did ask for, like bulk edit?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Customer sarcastically asks the company to build the requested bulk edit feature instead of unrequested ones."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "sarcasm"
+      ],
+      "notes": "Sarcastic feature request. Not technical: nothing is broken.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0079",
+      "input": {
+        "email": "Hi,\n\nWe're a mid-sized logistics company in Rotterdam and we're in the final stages of choosing a tool for our operations team of about 60 people. Our IT department has been running a thorough evaluation and I'm the person collecting the last open questions before our steering committee meets next week. So far the product has impressed everyone who tested it during the trial, although a couple of testers mentioned that the export button felt a little slow on large reports, but they weren't too bothered by it.\n\nOur legal and compliance teams have a short list of things they need before they can approve the purchase. The most important one is data residency: can you tell me in which region our data would be stored, and whether it's possible to keep everything inside the EU? Linked to that, we'd need a signed data processing agreement, and if you have a standard template we could review, that would save us a lot of time. I know you probably get this question often so a link to a document would also be fine.\n\nThanks in advance for your help, and I'm happy to jump on a call if that's easier.\n\nBest regards,\nAnnika"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer asks where their data would be stored, whether it can stay in the EU, and for a data processing agreement to review."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "long",
+        "multi_issue"
+      ],
+      "notes": "Data residency and DPA request mixed with a passing remark about a slow export. Legal documents are general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    },
+    {
+      "id": "gc-0080",
+      "input": {
+        "email": "We are considering buying 500 seats. Billing and invoicing details matter a lot to us, so can you explain how payments, invoicing and refunds work?"
+      },
+      "expected": {
+        "category": "general",
+        "summary": "Prospective customer considering 500 seats asks how payments, invoicing and refunds work."
+      },
+      "expected_difficulty": "hard",
+      "edge_cases": [
+        "ambiguous"
+      ],
+      "notes": "Billing vocabulary, but pre-sales (rule 4), so general.",
+      "source": "hand_written",
+      "added_in": "v1"
+    }
+  ]
+}

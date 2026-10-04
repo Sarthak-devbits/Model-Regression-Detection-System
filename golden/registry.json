@@ -1,0 +1,11 @@
+{
+  "versions": {
+    "v1": {
+      "status": "frozen",
+      "based_on": null,
+      "content_hash": "5cbe61a35625d63267b98f52f7c4c7b69b8bd0cc1e104c4cc92fc16b7dfa7399",
+      "case_count": 80,
+      "frozen_at": "2026-10-04T09:37:18+00:00"
+    }
+  }
+}
