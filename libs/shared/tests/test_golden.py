@@ -5,7 +5,6 @@ from shared.categories import Category
 from shared.golden import Difficulty
 
 
-# dummy comment
 def test_valid_case_loads_into_typed_objects(make_case, make_dataset) -> None:
     dataset = make_dataset([make_case(1, category="technical", difficulty="hard")])
     case = dataset.cases[0]
