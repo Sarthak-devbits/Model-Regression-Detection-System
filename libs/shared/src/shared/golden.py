@@ -108,10 +108,7 @@ class GoldenDataset(StrictModel):
         current = version_number(self.dataset_version)
         for case in self.cases:
             if version_number(case.added_in) > current:
-                raise ValueError(
-                    f"{case.id} says added_in={case.added_in}, "
-                    f"but this is dataset {self.dataset_version}"
-                )
+                raise ValueError(f"{case.id} says added_in={case.added_in}, but this is dataset {self.dataset_version}")
         return self
 
     def content_hash(self) -> str:

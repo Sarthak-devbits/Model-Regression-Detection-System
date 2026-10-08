@@ -4,8 +4,14 @@ import httpx2 as httpx
 import pytest
 from openai import AsyncOpenAI
 
-from classifier_service.llm import LLMError, OpenAIClient
-from classifier_service.prompting import OUTPUT_JSON_SCHEMA
+from shared.llm import LLMError, OpenAIClient
+
+SCHEMA = {
+    "type": "object",
+    "properties": {"answer": {"type": "string"}},
+    "required": ["answer"],
+    "additionalProperties": False,
+}
 
 
 def completion_body(content: str, finish_reason: str = "stop") -> dict:
@@ -45,7 +51,7 @@ async def call(client: OpenAIClient):
         model="gpt-4o-mini",
         temperature=0,
         max_output_tokens=100,
-        json_schema=OUTPUT_JSON_SCHEMA,
+        json_schema=SCHEMA,
     )
 
 
@@ -65,7 +71,7 @@ async def test_request_uses_strict_structured_outputs() -> None:
     assert sent["temperature"] == 0
     assert sent["response_format"]["type"] == "json_schema"
     assert sent["response_format"]["json_schema"]["strict"] is True
-    assert sent["response_format"]["json_schema"]["schema"] == OUTPUT_JSON_SCHEMA
+    assert sent["response_format"]["json_schema"]["schema"] == SCHEMA
 
 
 @pytest.mark.parametrize(

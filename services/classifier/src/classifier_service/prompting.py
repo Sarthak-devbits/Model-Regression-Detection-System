@@ -3,8 +3,8 @@
 import json
 from typing import Any
 
-from classifier_service.llm import Message
 from shared.categories import Category
+from shared.llm import Message
 from shared.prompts import PromptConfig
 
 # Sent to the model as the required reply format (OpenAI structured outputs).

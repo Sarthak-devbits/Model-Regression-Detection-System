@@ -124,8 +124,7 @@ def validate_version(version: str, registry: dict[str, Any], strict: bool) -> bo
     status = entry["status"] if entry else "unregistered"
     verdict = "ok" if ok else "FAILED"
     print(
-        f"  {verdict}: {len(dataset.cases)} cases, {errors} errors, "
-        f"{warnings} warnings ({status}{', strict' if strict else ''})"
+        f"  {verdict}: {len(dataset.cases)} cases, {errors} errors, {warnings} warnings ({status}{', strict' if strict else ''})"
     )
     return ok
 

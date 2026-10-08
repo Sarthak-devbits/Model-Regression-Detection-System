@@ -661,6 +661,7 @@ name = "shared"
 version = "0.1.0"
 source = { editable = "libs/shared" }
 dependencies = [
+    { name = "openai" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
@@ -668,6 +669,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "openai", specifier = ">=1.40" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pydantic-settings", specifier = ">=2.3" },
     { name = "pyyaml", specifier = ">=6.0" },

@@ -5,9 +5,9 @@ import time
 
 from pydantic import ValidationError
 
-from classifier_service.llm import LLMClient
 from classifier_service.prompting import OUTPUT_JSON_SCHEMA, build_messages
 from shared.classification import ClassifierOutput, ClassifyResponse, TokenUsage
+from shared.llm import LLMClient
 from shared.prompts import PromptConfig
 
 log = logging.getLogger(__name__)

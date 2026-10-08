@@ -3,9 +3,9 @@ from collections.abc import Iterator
 import pytest
 from fastapi.testclient import TestClient
 
-from classifier_service.llm import FakeLLMClient, LLMError, LLMResult
 from classifier_service.main import create_app
 from classifier_service.settings import ClassifierSettings
+from shared.llm import FakeLLMClient, LLMError, LLMResult
 
 GOOD_REPLY = '{"category": "technical", "summary": "CSV export downloads nothing."}'
 

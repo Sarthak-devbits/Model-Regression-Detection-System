@@ -1,6 +1,9 @@
-"""Provider adapter: the only place that knows how to talk to an LLM vendor."""
+"""Provider adapter: the only place that knows how to talk to an LLM vendor.
 
-import json
+Shared by the classifier service and the judge worker.
+"""
+
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -101,20 +104,19 @@ class OpenAIClient:
         await self._client.close()
 
 
+Responder = Callable[[list[Message]], str]
+
+
 class FakeLLMClient:
     """Offline stand-in for tests and local runs without an API key.
 
-    Returns scripted replies in order; when none are left, makes a keyword guess.
+    Returns scripted replies in order. When none are left, asks the responder function
+    (if given) to produce a reply from the messages.
     """
 
-    KEYWORDS: dict[str, tuple[str, ...]] = {
-        "billing": ("refund", "invoice", "charge", "receipt", "bill", "payment"),
-        "technical": ("error", "bug", "crash", "broken", "not working", "fails", "500"),
-        "account": ("password", "log in", "login", "locked", "email address", "account"),
-    }
-
-    def __init__(self, replies: list[str] | None = None) -> None:
+    def __init__(self, replies: list[str] | None = None, responder: Responder | None = None) -> None:
         self._replies = list(replies or [])
+        self._responder = responder
         self.calls: list[dict[str, Any]] = []
 
     async def complete(
@@ -135,20 +137,15 @@ class FakeLLMClient:
                 "json_schema": json_schema,
             }
         )
-        text = self._replies.pop(0) if self._replies else self._keyword_reply(messages[-1])
+        if self._replies:
+            text = self._replies.pop(0)
+        elif self._responder is not None:
+            text = self._responder(messages)
+        else:
+            raise RuntimeError("FakeLLMClient has no scripted replies left and no responder")
         return LLMResult(
             text=text,
             input_tokens=sum(len(m["content"].split()) for m in messages),
             output_tokens=len(text.split()),
             model=f"fake:{model}",
         )
-
-    def _keyword_reply(self, last_message: Message) -> str:
-        email = last_message["content"].lower()
-        category = next(
-            (name for name, words in self.KEYWORDS.items() if any(w in email for w in words)),
-            "general",
-        )
-        words = last_message["content"].replace("<email>", "").replace("</email>", "").split()
-        summary = "Offline fake summary: " + " ".join(words[:12])
-        return json.dumps({"category": category, "summary": summary})

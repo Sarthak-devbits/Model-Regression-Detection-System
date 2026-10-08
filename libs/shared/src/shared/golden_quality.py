@@ -76,16 +76,13 @@ def _check_category_coverage(dataset: GoldenDataset, rules: QualityRules) -> lis
     for category in Category:
         count = counts.get(category, 0)
         if count == 0:
-            findings.append(
-                Finding(Severity.ERROR, "category_coverage", f"no cases for '{category}'")
-            )
+            findings.append(Finding(Severity.ERROR, "category_coverage", f"no cases for '{category}'"))
         elif count / total < rules.min_category_share:
             findings.append(
                 Finding(
                     Severity.WARNING,
                     "category_balance",
-                    f"'{category}' is {count / total:.0%} of cases; "
-                    f"aim for at least {rules.min_category_share:.0%}",
+                    f"'{category}' is {count / total:.0%} of cases; aim for at least {rules.min_category_share:.0%}",
                 )
             )
     return findings
@@ -150,8 +147,7 @@ def _check_each_case(dataset: GoldenDataset, rules: QualityRules) -> list[Findin
                 Finding(
                     Severity.WARNING,
                     "summary_length",
-                    f"summary has {words} words; keep it between "
-                    f"{rules.min_summary_words} and {rules.max_summary_words}",
+                    f"summary has {words} words; keep it between {rules.min_summary_words} and {rules.max_summary_words}",
                     case.id,
                 )
             )

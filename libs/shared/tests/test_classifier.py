@@ -1,8 +1,9 @@
 import pytest
 
 from classifier_service.classifier import InvalidModelOutputError, classify_email
-from classifier_service.llm import FakeLLMClient, LLMResult
+from classifier_service.fake import keyword_reply
 from shared.categories import Category
+from shared.llm import FakeLLMClient, LLMResult
 
 GOOD_REPLY = '{"category": "billing", "summary": "Customer wants a refund for a double charge."}'
 
@@ -65,6 +66,6 @@ async def test_refusal_is_invalid(prompt) -> None:
 
 
 async def test_fake_keyword_mode_needs_no_script(prompt) -> None:
-    response = await classify_email("I need a refund", prompt, FakeLLMClient())
+    response = await classify_email("I need a refund", prompt, FakeLLMClient(responder=keyword_reply))
     assert response.output.category is Category.BILLING
     assert response.model == "fake:gpt-4o-mini"
