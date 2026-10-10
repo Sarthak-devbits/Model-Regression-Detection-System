@@ -18,11 +18,13 @@ dev = [
 package = false
 
 [tool.uv.workspace]
-members = ["libs/shared", "services/classifier"]
+members = ["libs/shared", "services/classifier","services/orchestrator", "services/workers"]
 
 [tool.uv.sources]
 shared = { workspace = true }
 classifier-service = { workspace = true }
+orchestrator = { workspace = true }
+eval-workers = { workspace = true }
 
 [tool.ruff]
 line-length = 130
@@ -32,7 +34,7 @@ target-version = "py311"
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["shared", "classifier_service"]
+known-first-party = ["shared", "classifier_service","orchestrator", "eval_workers"]
 
 [tool.pytest.ini_options]
 testpaths = ["libs", "services"]

@@ -1,0 +1,21 @@
+[project]
+name = "eval-workers"
+version = "0.1.0"
+description = "Celery workers: run cases, judge summaries, aggregate and compare runs"
+requires-python = ">=3.13"
+dependencies = [
+  "shared",
+  "celery[redis]>=5.4",
+  "httpx>=0.27",
+  "flower>=2.0",
+]
+
+[tool.uv.sources]
+shared = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eval_workers"]
