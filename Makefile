@@ -5,6 +5,8 @@ COMPOSE := docker compose -f infra/docker-compose.yml --env-file .env
 .PHONY: help install up down logs ps redis-ping test lint fmt check clean golden-validate golden-strict golden-stats golden-schema golden-new golden-freeze
 
 V ?= v1
+PROMPT ?= prompts/classifier/v1.yaml
+DATASET ?= v1
 
 help: ## Show this list
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "} {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -78,3 +80,21 @@ golden-new: ## Start a new draft version (FROM=v1 TO=v2)
 
 golden-freeze: ## Lock a version as an official eval bar (V=v1)
 	uv run python scripts/golden.py freeze $(V)
+
+
+# ---------- eval pipeline (Phase 3) ----------
+
+orchestrator-dev: ## Run the orchestrator API locally on port 8000
+	uv run uvicorn orchestrator.main:create_app --factory --reload --port 8000
+
+workers-dev: ## Run one local worker that serves all three queues
+	uv run celery -A eval_workers.celery_app worker -Q eval,judge,reports -P threads -c 4 --loglevel INFO
+
+flower-dev: ## Queue monitor at http://localhost:5555
+	uv run celery -A eval_workers.celery_app flower --port=5555
+
+eval: ## Run an eval: make eval PROMPT=prompts/classifier/v2.yaml DATASET=v1
+	uv run python scripts/run_eval.py --prompt $(PROMPT) --dataset $(DATASET)
+
+baseline: ## Promote a finished run to baseline: make baseline RUN=run_...
+	uv run python scripts/run_eval.py --promote $(RUN)
