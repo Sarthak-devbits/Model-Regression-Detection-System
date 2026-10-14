@@ -5,10 +5,11 @@ import pytest
 from pydantic import ValidationError
 
 from shared.categories import Category
-from shared.prompts import PromptConfig, load_prompt
+from shared.prompts import PromptConfig, load_judge_prompt, load_prompt
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PROMPT_FILES = sorted((REPO_ROOT / "prompts" / "classifier").glob("*.yaml"))
+JUDGE_FILES = sorted((REPO_ROOT / "prompts" / "judge").glob("*.yaml"))
 
 
 def minimal_prompt(**overrides) -> dict:
@@ -25,6 +26,11 @@ def minimal_prompt(**overrides) -> dict:
 def test_every_committed_prompt_file_loads(path: Path) -> None:
     prompt = load_prompt(path)
     assert prompt.version_id == path.stem
+
+
+@pytest.mark.parametrize("path", JUDGE_FILES, ids=lambda p: p.name)
+def test_every_committed_judge_rubric_loads(path: Path) -> None:
+    assert load_judge_prompt(path).version_id == path.stem
 
 
 def test_there_is_at_least_one_prompt_file() -> None:
