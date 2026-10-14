@@ -1,5 +1,18 @@
 name: regci
 
+# Settings shared by every worker container. Each service below merges this in with <<.
+x-worker: &worker
+  build:
+    context: ..
+    dockerfile: services/workers/Dockerfile
+  image: regci/workers:dev
+  env_file:
+    - ../.env
+  restart: unless-stopped
+  depends_on:
+    redis:
+      condition: service_healthy
+
 services:
   redis:
     image: redis:7.4-alpine
@@ -28,5 +41,72 @@ services:
       - "127.0.0.1:8001:8001"
     restart: unless-stopped
 
+  orchestrator:
+    build:
+      context: ..
+      dockerfile: services/orchestrator/Dockerfile
+    image: regci/orchestrator:dev
+    env_file:
+      - ../.env
+    environment:
+      SERVICE_NAME: orchestrator
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_PATH: /data/regci.sqlite3
+      GOLDEN_DIR: /app/golden
+      PROMPTS_DIR: /app/prompts
+    volumes:
+      - sqlite_data:/data
+      - ../golden:/app/golden:ro
+      - ../prompts:/app/prompts:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker-eval:
+    <<: *worker
+    command: ["celery", "-A", "eval_workers.celery_app", "worker",
+              "-Q", "eval", "-c", "8", "-n", "eval@%h", "--loglevel", "INFO"]
+    environment:
+      SERVICE_NAME: worker-eval
+      REDIS_URL: redis://redis:6379/0
+      CLASSIFIER_URL: http://classifier:8001
+    depends_on:
+      redis:
+        condition: service_healthy
+      classifier:
+        condition: service_healthy
+
+  worker-judge:
+    <<: *worker
+    command: ["celery", "-A", "eval_workers.celery_app", "worker",
+              "-Q", "judge", "-c", "4", "-n", "judge@%h", "--loglevel", "INFO"]
+    environment:
+      SERVICE_NAME: worker-judge
+      REDIS_URL: redis://redis:6379/0
+
+  worker-reports:
+    <<: *worker
+    command: ["celery", "-A", "eval_workers.celery_app", "worker",
+              "-Q", "reports", "-c", "1", "-n", "reports@%h", "--loglevel", "INFO"]
+    environment:
+      SERVICE_NAME: worker-reports
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_PATH: /data/regci.sqlite3
+    volumes:
+      - sqlite_data:/data
+
+  flower:
+    <<: *worker
+    command: ["celery", "-A", "eval_workers.celery_app", "flower", "--port=5555"]
+    environment:
+      SERVICE_NAME: flower
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "127.0.0.1:5555:5555"
+
 volumes:
   redis_data:
+  sqlite_data:
